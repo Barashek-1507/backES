@@ -21,53 +21,14 @@ import net.sourceforge.jFuzzyLogic.ruleConnectionMethod.RuleConnectionMethodAndM
 import net.sourceforge.jFuzzyLogic.ruleConnectionMethod.RuleConnectionMethodOrMax;
 
 public class TestTipperJava {
-
-    static void animateFis(FIS fis) throws Exception {
-        if (JFuzzyChart.UseMockClass) {
-            Gpr.debug("Using mock class");
-            return; // Nothing done
-        }
-
-        // Create a plot
-        JDialogFis jdf = new JDialogFis(fis, 800, 600);
-
-        // Set different values for 'upperArterialPressure' and 'service'. Evaluate the system and show variables
-        //		for( double service = 0.0, upperArterialPressure = 1; service <= 10; service += 0.1 ) {
-        for (double service = 0.0, upperArterialPressure = 1; service <= 10; service += 0.1) {
-            upperArterialPressure = service;
-            // Evaluate system using these parameters
-            fis.getVariable("").setValue(service);
-            fis.getVariable("upperArterialPressure").setValue(upperArterialPressure);
-            fis.evaluate();
-
-            // Print result & update plot
-            System.out.println(String.format("Service: %2.2f\tupperArterialPressure:%2.2f\t=> tip: %2.2f %%", service, upperArterialPressure, fis.getVariable("tip").getValue()));
-            jdf.repaint();
-
-            // Small delay
-            Thread.sleep(100);
-        }
-
-    }
-
-    /**
-     * Main
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
+    public static double solution(int iRespiratoryRate, int iUpperArterialPressure, int iLowerArterialPressure, int iAge  ) {
         System.out.println("Begin ");
 
         FIS fis = new FIS();
 
-        // FUNCTION_BLOCK tipper
         FunctionBlock functionBlock = new FunctionBlock(fis);
         fis.addFunctionBlock("pneumonia", functionBlock);
 
-        //		VAR_INPUT
-        //		   service : REAL;
-        //		   upperArterialPressure : REAL
-        //		END_VAR
 
         Variable respiratoryRate = new Variable("respiratoryRate");
         Variable upperArterialPressure = new Variable("upperArterialPressure");
@@ -78,22 +39,18 @@ public class TestTipperJava {
         functionBlock.setVariable(lowerArterialPressure.getName(), lowerArterialPressure);
         functionBlock.setVariable(age.getName(), age);
 
-        //		VAR_OUTPUT
-        //		   tip : REAL;
-        //		END_VAR
-
         Variable pneumonia = new Variable("pneumonia");
         functionBlock.setVariable(pneumonia.getName(), pneumonia);
 
 
-        Value lowRateX[] = { new Value(0), new Value(15) };
-        Value lowRateY[] = { new Value(1), new Value(0) };
+        Value lowRateX[] = {new Value(0), new Value(15)};
+        Value lowRateY[] = {new Value(1), new Value(0)};
         MembershipFunction lowRate = new MembershipFunctionPieceWiseLinear(lowRateX, lowRateY);
 
         MembershipFunction normalRate = new MembershipFunctionTrapetzoidal(new Value(14), new Value(16), new Value(20), new Value(26));
 
-        Value highRateX[] = { new Value(22), new Value(40), new Value(50) };
-        Value highRateY[] = { new Value(0), new Value(1), new Value(1) };
+        Value highRateX[] = {new Value(22), new Value(40), new Value(50)};
+        Value highRateY[] = {new Value(0), new Value(1), new Value(1)};
         MembershipFunction highRate = new MembershipFunctionPieceWiseLinear(highRateX, highRateY);
 
         LinguisticTerm ltLowRate = new LinguisticTerm("lowRate", lowRate);
@@ -104,13 +61,9 @@ public class TestTipperJava {
         respiratoryRate.add(ltNormalRate);
         respiratoryRate.add(ltHighRate);
 
-        //		FUZZIFY upperArterialPressure
-        //		   TERM rancid := (0, 1) (1, 1) (3,0) ;
-        //		   TERM delicious := (7,0) (9,1) (10,1);
-        //		END_FUZZIFY
 
-        Value lowPressureLX[] = { new Value(0), new Value(60) };
-        Value lowPressureLY[] = { new Value(1), new Value(0) };
+        Value lowPressureLX[] = {new Value(0), new Value(60)};
+        Value lowPressureLY[] = {new Value(1), new Value(0)};
         MembershipFunction lowPressureL = new MembershipFunctionPieceWiseLinear(lowPressureLX, lowPressureLY);
 
         MembershipFunction middlePressureL = new MembershipFunctionTriangular(new Value(55), new Value(80), new Value(105));
@@ -126,8 +79,8 @@ public class TestTipperJava {
         lowerArterialPressure.add(ltHighPressureL);
 
 
-        Value lowPressureUX[] = { new Value(0), new Value(95) };
-        Value lowPressureUY[] = { new Value(1), new Value(0) };
+        Value lowPressureUX[] = {new Value(0), new Value(95)};
+        Value lowPressureUY[] = {new Value(1), new Value(0)};
         MembershipFunction lowPressureU = new MembershipFunctionPieceWiseLinear(lowPressureUX, lowPressureUY);
 
         MembershipFunction middlePressureU = new MembershipFunctionTriangular(new Value(85), new Value(120), new Value(175));
@@ -143,14 +96,14 @@ public class TestTipperJava {
         upperArterialPressure.add(ltHighPressureU);
 
 
-        Value juniorX[] = { new Value(0), new Value(40) };
-        Value juniorY[] = { new Value(1), new Value(0) };
+        Value juniorX[] = {new Value(0), new Value(40)};
+        Value juniorY[] = {new Value(1), new Value(0)};
         MembershipFunction junior = new MembershipFunctionPieceWiseLinear(juniorX, juniorY);
 
         MembershipFunction middle = new MembershipFunctionTrapetzoidal(new Value(30), new Value(45), new Value(55), new Value(70));
 
-        Value almostDeadX[] = { new Value(60), new Value(124) };
-        Value almostDeadY[] = { new Value(0), new Value(1) };
+        Value almostDeadX[] = {new Value(60), new Value(124)};
+        Value almostDeadY[] = {new Value(0), new Value(1)};
         MembershipFunction almostDead = new MembershipFunctionPieceWiseLinear(almostDeadX, almostDeadY);
 
         LinguisticTerm ltJunior = new LinguisticTerm("junior", junior);
@@ -160,7 +113,7 @@ public class TestTipperJava {
         age.add(ltJunior);
         age.add(ltMiddle);
         age.add(ltAlmostDead);
-        
+
         MembershipFunction first = new MembershipFunctionTriangular(new Value(0), new Value(5), new Value(10));
         MembershipFunction second = new MembershipFunctionTriangular(new Value(10), new Value(15), new Value(20));
         MembershipFunction third = new MembershipFunctionTriangular(new Value(20), new Value(25), new Value(30));
@@ -175,16 +128,11 @@ public class TestTipperJava {
 
         pneumonia.setDefuzzifier(new DefuzzifierCenterOfGravity(pneumonia));
 
-        //		RULEBLOCK No1
-        //		   ACCU : MAX;
-        //		   AND : MIN;
-        //		   ACT : MIN;
         RuleBlock ruleBlock = new RuleBlock(functionBlock);
         ruleBlock.setName("No1");
         ruleBlock.setRuleAccumulationMethod(new RuleAccumulationMethodMax());
         ruleBlock.setRuleActivationMethod(new RuleActivationMethodMin());
 
-        //		   RULE 1 : IF service IS poor OR upperArterialPressure is rancid THEN tip IS cheap;
         Rule rule1 = new Rule("Rule1", ruleBlock);
         RuleTerm term1 = new RuleTerm(respiratoryRate, "lowRate", false);
         RuleTerm term2 = new RuleTerm(upperArterialPressure, "middlePressureU", false);
@@ -232,12 +180,39 @@ public class TestTipperJava {
         ruleBlocksMap.put(ruleBlock.getName(), ruleBlock);
         functionBlock.setRuleBlocks(ruleBlocksMap);
 
-        System.out.println(fis);
-        animateFis(fis);
+        functionBlock.setVariable("respiratoryRate", iRespiratoryRate);
+        functionBlock.setVariable("upperArterialPressure", iUpperArterialPressure);
+        functionBlock.setVariable("lowerArterialPressure", iLowerArterialPressure);
+        functionBlock.setVariable("age", iAge);
 
-        System.out.println("End TestTipperJava");
+        functionBlock.evaluate();
+
+        return functionBlock.getVariable("pneumonia").getValue();
     }
 
-    public TestTipperJava() {
+    public static Rule createRule(RuleBlock ruleBlock, Variable respiratoryRate,
+                                  Variable upperArterialPressure,
+                                  Variable lowerArterialPressure, Variable age,
+                                  Variable pneumonia,
+                                  String rR,
+                                  String uAP,
+                                  String lAP,
+                                  String a,
+                                  String s) {
+
+        Rule rule1 = new Rule("Rule", ruleBlock);
+        RuleTerm term1 = new RuleTerm(respiratoryRate, rR, false);
+        RuleTerm term2 = new RuleTerm(upperArterialPressure, uAP, false);
+        RuleTerm term3 = new RuleTerm(lowerArterialPressure, lAP, false);
+        RuleTerm term4 = new RuleTerm(age, a, false);
+
+        RuleExpression firstRule = new RuleExpression(term1, term2, RuleConnectionMethodAndMin.get());
+        RuleExpression secondRule = new RuleExpression(firstRule, term3, RuleConnectionMethodAndMin.get());
+        RuleExpression thirdRule = new RuleExpression(secondRule, term4, RuleConnectionMethodAndMin.get());
+        rule1.setAntecedents(thirdRule);
+
+        rule1.addConsequent(pneumonia, s, false);
+        return rule1;
+
     }
 }
