@@ -13,13 +13,20 @@ public class ExpertSystemsApplication {
     public static void main(String[] args) {
         SpringApplication.run(ExpertSystemsApplication.class, args);
     }
-    @GetMapping("")
+
+    @GetMapping("/es")
     @ResponseBody
-    public String getSolution(@RequestParam("respiratoryRate") String respiratoryRate,
-                              @RequestParam("upperArterialPressure") String upperArterialPressure,
-                              @RequestParam("lowerArterialPressure") String lowerArterialPressure,
-                              @RequestParam("age") String age)
-    {
+    public String getSolution(
+            @RequestParam("respiratoryRate") String respiratoryRate,
+            @RequestParam("upperArterialPressure") String upperArterialPressure,
+            @RequestParam("lowerArterialPressure") String lowerArterialPressure,
+            @RequestParam("age") String age
+    ){
         return Double.toString(TestTipperJava.solution(Integer.parseInt(respiratoryRate), Integer.parseInt(upperArterialPressure), Integer.parseInt(lowerArterialPressure), Integer.parseInt(age)));
+    }
+    @GetMapping("/e")
+    @ResponseBody
+    public String getSolutio(){
+        return "d";
     }
 }

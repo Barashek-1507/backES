@@ -175,6 +175,15 @@ public class TestTipperJava {
         rule3.addConsequent(pneumonia, "third", false);
         ruleBlock.add(rule3);
 
+        ruleBlock.add(TestTipperJava.createRule(ruleBlock, respiratoryRate,upperArterialPressure, lowerArterialPressure,age,pneumonia,"lowRate","lowPressureU", "lowPressureL", "junior","first"));
+        ruleBlock.add(TestTipperJava.createRule(ruleBlock, respiratoryRate,upperArterialPressure, lowerArterialPressure,age,pneumonia,"lowRate","lowPressureU", "middlePressureL", "junior","second"));
+        ruleBlock.add(TestTipperJava.createRule(ruleBlock, respiratoryRate,upperArterialPressure, lowerArterialPressure,age,pneumonia,"lowRate","lowPressureU", "highPressureL", "junior","second"));
+        ruleBlock.add(TestTipperJava.createRule(ruleBlock, respiratoryRate,upperArterialPressure, lowerArterialPressure,age,pneumonia,"middleRate","lowPressureU", "lowPressureL", "middle","first"));
+        ruleBlock.add(TestTipperJava.createRule(ruleBlock, respiratoryRate,upperArterialPressure, lowerArterialPressure,age,pneumonia,"middleRate","middlePressureU", "middlePressureL", "middle","second"));
+        ruleBlock.add(TestTipperJava.createRule(ruleBlock, respiratoryRate,upperArterialPressure, lowerArterialPressure,age,pneumonia,"middleRate","highPressureU", "highPressureL", "middle","second"));
+        ruleBlock.add(TestTipperJava.createRule(ruleBlock, respiratoryRate,upperArterialPressure, lowerArterialPressure,age,pneumonia,"highRate","highPressureU", "lowPressureL", "almostDead","third"));
+        ruleBlock.add(TestTipperJava.createRule(ruleBlock, respiratoryRate,upperArterialPressure, lowerArterialPressure,age,pneumonia,"highRate","highPressureU", "middlePressureL", "almostDead","third"));
+        ruleBlock.add(TestTipperJava.createRule(ruleBlock, respiratoryRate,upperArterialPressure, lowerArterialPressure,age,pneumonia,"highRate","highPressureU", "highPressureL", "almostDead","third"));
 
         HashMap<String, RuleBlock> ruleBlocksMap = new HashMap<String, RuleBlock>();
         ruleBlocksMap.put(ruleBlock.getName(), ruleBlock);
